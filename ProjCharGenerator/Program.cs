@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace generator
 {
-    class CharGenerator 
+    public class CharGenerator 
     {
         private string syms = "абвгдеёжзийклмнопрстуфхцчшщьыъэюя"; 
         private char[] data;
@@ -21,7 +21,7 @@ namespace generator
            return data[random.Next(0, size)]; 
         }
     }
-    class BigrGenerator
+    public class BigrGenerator
     {
         private Dictionary<string, int> map;
         private int max;
@@ -66,7 +66,7 @@ namespace generator
             return res;
         }
     }
-    class WordGenerator
+    public class WordGenerator
     {
         private Dictionary<string, int> map;
         private int max;
