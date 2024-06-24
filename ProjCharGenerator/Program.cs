@@ -66,6 +66,51 @@ namespace generator
             return res;
         }
     }
+    class WordGenerator
+    {
+        private Dictionary<string, int> map;
+        private int max;
+        public WordGenerator()
+        {
+            map = new Dictionary<string, int>();
+            max = 0;
+        }
+        public void Load(string fileName)
+        {
+            List<string> lines = File.ReadAllLines(fileName).ToList();
+            Dictionary<string, int> newmap = new Dictionary<string, int>();
+            foreach (string line in lines)
+            {
+                string[] words = line.Split('\t', StringSplitOptions.RemoveEmptyEntries);
+                max += Convert.ToInt32(words[2]);
+                newmap.Add(words[1], max);
+            }
+            Load(newmap);
+        }
+        public void Load(Dictionary<string, int> load)
+        {
+            map = load;
+        }
+        public string GetWord()
+        {
+            Random rand = new Random();
+            long num = rand.NextInt64(max);
+            foreach (var pair in map)
+            {
+                if (num <= pair.Value) return pair.Key;
+            }
+            return map.Keys.ToList().Last();
+        }
+        public string GetString(int count)
+        {
+            string res = "";
+            for (int i = 0; i < count; i++)
+            {
+                res += GetWord() + " ";
+            }
+            return res;
+        }
+    }
     class Program
     {
         static void Main(string[] args)
@@ -90,6 +135,11 @@ namespace generator
             bgen.Load("bigrams.txt");
             Console.WriteLine(bgen.GetString(10));
             File.WriteAllText("gen-1.txt", bgen.GetString(1000));
+
+            WordGenerator wgen = new WordGenerator();
+            wgen.Load("words.txt");
+            Console.WriteLine(wgen.GetString(10));
+            File.WriteAllText("gen-2.txt", wgen.GetString(1000));
         }
     }
 }
